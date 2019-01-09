@@ -1,0 +1,13 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/python:3.6.3-stretch
+    steps:
+      - checkout
+      - run: sudo pip install pip==18.0
+      - run: sudo pip install pipenv codecov
+      - run: pipenv install --dev
+      - run: pipenv run make test
+      - run: pipenv check
+      - run: codecov -t $CODECOV_TOKEN || echo 'Sending coverage failed'
